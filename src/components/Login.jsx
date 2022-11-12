@@ -6,14 +6,14 @@ import jwt_decode from 'jwt-decode'
 import {FcGoogle} from 'react-icons/fc'
 import shareVideo from '../assets/share.mp4'
 import logo from '../assets/logowhite.png'
+import {client} from '../client'
 
 const Login = () => {
-
+const navigate = useNavigate();
 const responseGoogleFail = () => console.log('fail')
 
     const responseGoogle = (response) => {
         const userObj = jwt_decode(response.credential)
-        console.log(userObj)
         localStorage.setItem('user', JSON.stringify(userObj))
         const {given_name: name, sub: googleId, picture} = userObj
         const doc = {
@@ -22,6 +22,11 @@ const responseGoogleFail = () => console.log('fail')
             userName: name,
             image: picture,
         }
+
+        client.createIfNotExists(doc)
+            .then(() => {
+                navigate('/', {replace: true})
+            })
     }
 
     return (
