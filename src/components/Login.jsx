@@ -1,16 +1,27 @@
 import React from 'react'
 import {GoogleLogin} from '@react-oauth/google'
 import {useNavigate} from 'react-router-dom'
+import jwt_decode from 'jwt-decode'
+
 import {FcGoogle} from 'react-icons/fc'
 import shareVideo from '../assets/share.mp4'
 import logo from '../assets/logowhite.png'
 
 const Login = () => {
 
+const responseGoogleFail = () => console.log('fail')
+
     const responseGoogle = (response) => {
-        // console.log(response)
-        localStorage.setItem('user',JSON.stringify(response.credential))
-        
+        const userObj = jwt_decode(response.credential)
+        console.log(userObj)
+        localStorage.setItem('user', JSON.stringify(userObj))
+        const {given_name: name, sub: googleId, picture} = userObj
+        const doc = {
+            _id: googleId,
+            _type: 'user',
+            userName: name,
+            image: picture,
+        }
     }
 
     return (
@@ -33,6 +44,7 @@ const Login = () => {
                         <GoogleLogin 
                             render={(renderProps) => (
                                 <button
+                                    clientId = {process.env.REACT_APP_GOOGLE_API_TOKEN}
                                     type='button'
                                     className='bg-mainColor flex justify-center items-center p-3 rounded-lg cursor-pointer outline-none'
                                     onClick={renderProps.onClick}
@@ -42,7 +54,7 @@ const Login = () => {
                                 </button>
                             )}
                             onSuccess={responseGoogle}
-                            onFailure={responseGoogle}
+                            onFailure={responseGoogleFail}
                             cookiePolicy='single_host_origin'
                         />
                     </div>
