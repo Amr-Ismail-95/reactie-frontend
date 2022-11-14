@@ -15,11 +15,11 @@ const responseGoogleFail = () => console.log('fail')
     const responseGoogle = (response) => {
         const userObj = jwt_decode(response.credential)
         localStorage.setItem('user', JSON.stringify(userObj))
-        const {given_name: name, sub: googleId, picture} = userObj
+        const {given_name, sub, picture} = userObj
         const doc = {
-            _id: googleId,
+            _id: sub,
             _type: 'user',
-            userName: name,
+            userName: given_name,
             image: picture,
         }
 
