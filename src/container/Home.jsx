@@ -23,6 +23,7 @@ const Home = () => {
     const query = userQuery(userInfo?.sub);
     client.fetch(query)
     .then((data) => {
+      console.log(data)
       setUser(data[0])
     })
   }, [])
