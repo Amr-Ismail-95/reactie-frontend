@@ -8,6 +8,7 @@ import { userQuery } from '../utils/data'
 import {HiMenu} from 'react-icons/hi'
 import {AiFillCloseCircle} from 'react-icons/ai'
 import logo from '../assets/logo.png'
+import { fetchUser } from '../utils/fetchUser'
 
 
 
@@ -17,13 +18,12 @@ const Home = () => {
   const [user, setUser] = useState(null)
   const scrollRef = useRef(null);
   
-  const userInfo = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : localStorage.clear()
+  const userInfo = fetchUser()
   
   useEffect(() => {
     const query = userQuery(userInfo?.sub);
     client.fetch(query)
     .then((data) => {
-      console.log(data)
       setUser(data[0])
     })
   }, [])
