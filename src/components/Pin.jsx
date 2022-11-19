@@ -101,7 +101,7 @@ const Pin = ({pin: {postedBy, image, _id, destination , save}}) => {
               {postedBy?._id === user.sub && (
                 <button
                 type='button'
-                onclick={(e)=>{
+                onClick={(e)=>{
                   e.stopPropagation()
                   deletePin(_id);
                 }}
