@@ -11,17 +11,18 @@ const Feed = () => {
   const [pins, setPins] = useState(null)
   const [loading, setLoading] = useState(false)
   const { categoryId } = useParams();
-
+  
   useEffect(() => {
     if(categoryId) {
-    setLoading(true)
+      setLoading(true)
       const query = searchQuery(categoryId)
       client.fetch(query)
       .then((data)=>{
         setPins(data);
+        // console.log(savedArray)
         setLoading(false);
       })
-
+      
     } else {
       client.fetch(feedQuery)
       .then((data)=>{

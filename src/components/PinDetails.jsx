@@ -3,13 +3,14 @@ import {Link, useParams} from 'react-router-dom'
 import {v4 as uuidv4} from 'uuid'
 import {client, urlFor} from '../client'
 import {pinDetailMorePinQuery, pinDetailQuery} from '../utils/data'
-
+import { fetchUser } from '../utils/fetchUser'
 import Spinner from './Spinner'
 import MasonryLayout from './MasonryLayout'
 
 import {MdDownloadForOffline} from 'react-icons/md'
 
 const PinDetails = ({user}) => {
+  const userImg = fetchUser().picture;
 
   const [pins, setPins] = useState(null);
   const [pinDetails, setPinDetails] = useState(null);
@@ -128,7 +129,8 @@ const PinDetails = ({user}) => {
         <Link to={`user-profile/${pinDetails.postedBy?._id}`}>
           <img 
           className='w-10 h-10 rounded-full cursor-pointer'
-          src={pinDetails.postedBy?.image}
+          // src={pinDetails.postedBy?.image}
+          src={userImg}
           alt='user-profile'
           />
         </Link>

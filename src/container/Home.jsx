@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react'
-import {Link, Route, Routes} from 'react-router-dom'
+import {Link, Route, Routes, useNavigate} from 'react-router-dom'
 import { Sidebar, UserProfile } from '../components'
 import { client } from '../client'
 import Pins from './Pins'
@@ -13,15 +13,17 @@ import { fetchUser } from '../utils/fetchUser'
 
 
 const Home = () => {
-
+  const [pins, setPins] = useState(null)
   const [toggleSidebar, setToggleSidebar] = useState(false)
   const [user, setUser] = useState(null)
   const scrollRef = useRef(null);
-  
+  const navigate = useNavigate()
   const userInfo = fetchUser()
   
   useEffect(() => {
+    
     const query = userQuery(userInfo?.sub);
+    if(!userInfo){navigate('/login')}
     client.fetch(query)
     .then((data) => {
       setUser(data[0])
@@ -31,7 +33,6 @@ const Home = () => {
 useEffect(() => {
   scrollRef.current.scrollTo(0,0)
 }, [])
-
 
   return (
     <div className='flex bg-gray-50 md:flex-row flex-col h-screen transaction-height duration-75 ease-out'>

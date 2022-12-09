@@ -14,13 +14,16 @@ import {BsFillArrowUpRightCircleFill} from 'react-icons/bs'
 const Pin = ({pin: {postedBy, image, _id, destination , save}}) => {
   const [postHovered, setPostHovered] = useState(false)
   const [savingPost, setSavingPost] = useState(false)
+
   const navigate = useNavigate();
   const user = fetchUser();
-  const alreadySaved = !!(save?.filter((item)=>item.postedBy._id === user.sub))?.length;
+  let alreadySaved = !!(save?.filter((item) => item.postedBy._id === user.sub))
+  // let alreadySaved = !!(save?.filter((item)=>item.postedBy._id === user.sub))?.length;
+
+
   const savePin = (id) => {
     if(!alreadySaved){
       setSavingPost(true)
-
       client
         .patch(id)
         .setIfMissing({save:[]})
@@ -34,19 +37,22 @@ const Pin = ({pin: {postedBy, image, _id, destination , save}}) => {
         }])
         .commit()
         .then(()=>{
+          alreadySaved = true
           window.location.reload();
-          setSavingPost(false); 
         })
     }
   } 
 
+
   const deletePin = (id) => {
     client
     .delete(id)
-    .then(()=>{
-      window.location.reload();
-    })
+    window.location.reload();
+
   }
+
+
+
 
   return (
     <div className='m-2'>
@@ -72,18 +78,19 @@ const Pin = ({pin: {postedBy, image, _id, destination , save}}) => {
 
               </div>
               {alreadySaved ? (
-                <button className='bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outlind-none'>
-                {save?.length}  Saved
+                <button type="button" className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none">
+                  {save?.length}  Saved
                 </button>
               ) : (
-                <button 
-                type='button' 
-                onClick={(e)=>{
-                  e.stopPropagation()
-                  savePin(_id);
-                }} 
-                className='bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outlind-none'>
-                  Save
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    savePin(_id);
+                  }}
+                  type="button"
+                  className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
+                >
+                {savingPost ? 'Saving' : 'Save'}
                 </button>
               )}
             </div>
